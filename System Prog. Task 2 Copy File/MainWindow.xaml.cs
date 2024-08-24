@@ -20,8 +20,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     public bool IsToButtonClicked { get; set; } = false;
     public bool IsFromButtonClicked { get; set; } = false;
     byte[]? buffer = null;
-    int NumBytesToRead = 0;
-    int NumByteRead = 0;
+    int BytesToRead = 0;
+    int ByteRead = 0;
     private int maximum = 0;
 
     public MainWindow()
@@ -77,14 +77,14 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         using (FileStream fs = new FileStream(FromText, FileMode.Open, FileAccess.Read))
         {
             buffer = new byte[fs.Length];
-            NumBytesToRead = Convert.ToInt32(fs.Length);
-            NumByteRead = 0;
+            BytesToRead = Convert.ToInt32(fs.Length);
+            ByteRead = 0;
 
-            while (NumBytesToRead > 0)
+            while (BytesToRead > 0)
             {
-                n = fs.Read(buffer, NumByteRead, NumBytesToRead);
-                NumBytesToRead -= n;
-                NumByteRead += n;
+                n = fs.Read(buffer, ByteRead, BytesToRead);
+                BytesToRead -= n;
+                ByteRead += n;
             }
         }
         Maximum = n;
@@ -94,11 +94,11 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             {
                 int count = 0;
 
-                while (NumByteRead > 0)
+                while (ByteRead > 0)
                 {
                     fs.Write(buffer, count, 1);
                     count++;
-                    NumByteRead--;
+                    ByteRead--;
                     Value += 1;
                     fs.Flush();
                     Thread.Sleep(50);
